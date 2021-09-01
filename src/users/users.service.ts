@@ -35,8 +35,6 @@ export class UsersService {
     const userExist =  await this.userRepository.findOne({id});
     if(!userExist) throw new BadRequestException('El usuario indicado no existe');
     const userUpdate = await this.userRepository.update(id,updateUserDto);
-    console.log(userUpdate);
-    
     if(userUpdate.affected>0)
     return {
       message:"Datos actualizados correctamente",
@@ -55,5 +53,13 @@ export class UsersService {
       data: userExist
     }
     return InternalServerErrorException;
+  }
+
+  async findByUsername(data){
+    return await this.userRepository
+    .createQueryBuilder('user')
+    .where(data)
+    .addSelect('user.password')
+    .getOne();
   }
 }

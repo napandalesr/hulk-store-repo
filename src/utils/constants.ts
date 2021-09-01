@@ -3,3 +3,4 @@ export const PORT = 'DATABASE_PORT';
 export const USERNAME = 'DATABASE_USERNAME';
 export const PASSWORD = 'DATABASE_PASSWORD';
 export const DATABASE = 'DATABASE_NAME';
+export const JWT_TOKEN = 'JWT_TOKEN';

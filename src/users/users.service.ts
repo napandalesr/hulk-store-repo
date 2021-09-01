@@ -15,9 +15,10 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const userExist =  await this.userRepository.findOne({username:createUserDto.username});
     if(userExist) throw new BadRequestException('El nombre de usuario ya está registrado');
-    const newUser = this.userRepository.create(createUserDto);
-    delete newUser.password;
-    return await this.userRepository.save(newUser);
+    const newUser = await this.userRepository.create(createUserDto);
+    const userSave = await this.userRepository.save(newUser);
+    delete userSave.password;
+    return userSave;
   }
 
   async findAll() {

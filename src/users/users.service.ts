@@ -50,7 +50,6 @@ export class UsersService {
     if(userDelete.affected>0) 
     return {
       message:"Usuario eliminado correctamente",
-      data: userExist
     }
     return InternalServerErrorException;
   }

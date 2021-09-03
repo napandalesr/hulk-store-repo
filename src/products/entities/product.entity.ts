@@ -17,4 +17,7 @@ export class Product {
 
   @Column({type:'float', nullable:true})
   suggestedSalePrice:number;
+
+  @Column({type:'float'})
+  existencias:number;
 }

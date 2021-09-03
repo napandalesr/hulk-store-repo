@@ -14,7 +14,7 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     const productExist = await this.productRepository.findOne({name:createProductDto.name});
-    if(productExist) throw new BadRequestException('Está categoria ya se encuentra registrada');
+    if(productExist) throw new BadRequestException('Este producto ya se encuentra registrado');
     const newProduct = await this.productRepository.create(createProductDto);
     return await this.productRepository.save(newProduct);
   }
@@ -27,7 +27,7 @@ export class ProductsService {
 
   async findOne(id: number) {
     const productExist = await this.productRepository.findOne({id});
-    if(!productExist) throw new BadRequestException('La categoria selecionada no existe')
+    if(!productExist) throw new BadRequestException('El producto seleccionado no existe')
     return productExist;
   }
 
@@ -54,5 +54,25 @@ export class ProductsService {
       message:"Producto eliminado correctamente",
     }
     return InternalServerErrorException;
+  }
+
+  async addExistenses(id:number, amount:number) {
+    let productExist = await this.productRepository.findOne({id});
+    const newExistences = productExist.existencias+amount;
+    const productUpdate = await this.productRepository.update(id,{existencias:newExistences});
+    if(productUpdate.affected>0){
+      return true;
+    }
+    throw InternalServerErrorException;
+  }
+
+  async deleteExistenses(id:number,amount:number) {
+    let productExist = await this.productRepository.findOne({id});
+    const newExistences = productExist.existencias-amount;
+    const productUpdate = await this.productRepository.update(id,{existencias:newExistences});
+    if(productUpdate.affected>0){
+      return true;
+    }
+    throw InternalServerErrorException;
   }
 }

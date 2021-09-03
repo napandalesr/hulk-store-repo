@@ -1,4 +1,4 @@
-import { IsDecimal, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateProductDto {
   @IsNumber()
@@ -13,4 +13,8 @@ export class CreateProductDto {
   @IsOptional()
   @IsNumber()
   suggestedSalePrice:number;
+
+  @IsOptional()
+  @IsNumber()
+  existencias:number=0;
 }

@@ -10,7 +10,6 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { EntriesModule } from './entries/entries.module';
 import { OutputsModule } from './outputs/outputs.module';
-import { StocksModule } from './stocks/stocks.module';
 import { CombinationsModule } from './combinations/combinations.module';
 
 @Module({
@@ -41,7 +40,6 @@ import { CombinationsModule } from './combinations/combinations.module';
     CategoriesModule,
     EntriesModule,
     OutputsModule,
-    StocksModule,
     CombinationsModule,
   ],
   controllers: [AppController],

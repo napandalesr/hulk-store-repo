@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProductsService } from 'src/products/products.service';
 import { Repository } from 'typeorm';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { UpdateEntryDto } from './dto/update-entry.dto';
@@ -9,12 +10,14 @@ import { Entry } from './entities/entry.entity';
 export class EntriesService {
   constructor(
     @InjectRepository(Entry)
-    private readonly entryRespository: Repository<Entry>
+    private readonly entryRespository: Repository<Entry>,
+    private readonly productService: ProductsService
   ){}
 
   async create(createEntryDto: CreateEntryDto) {
     createEntryDto['costTotal']=createEntryDto.units*createEntryDto.costUnit;
     const newEntry = await this.entryRespository.create(createEntryDto);
+    this.productService.addExistenses(newEntry.idProduct,newEntry.units);
     return await this.entryRespository.save(newEntry);
   }
 

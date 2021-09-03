@@ -5,6 +5,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DATABASE, HOST, PASSWORD, PORT, USERNAME } from './utils/constants';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
+import { EntriesModule } from './entries/entries.module';
+import { OutputsModule } from './outputs/outputs.module';
+import { StocksModule } from './stocks/stocks.module';
+import { CombinationsModule } from './combinations/combinations.module';
 
 @Module({
   imports: [
@@ -29,6 +36,13 @@ import { UsersModule } from './users/users.module';
       envFilePath: '.env'
     }),
     UsersModule,
+    AuthModule,
+    ProductsModule,
+    CategoriesModule,
+    EntriesModule,
+    OutputsModule,
+    StocksModule,
+    CombinationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

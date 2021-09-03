@@ -25,25 +25,27 @@ export class CategoriesService {
 
   async findOne(id: number) {
     const categoryExist = await this.categoryRepository.findOne({id});
-    if(!Category) throw new BadRequestException('La categoria selecionada no existe')
+    if(!categoryExist) throw new BadRequestException('La categoria selecionada no existe')
     return categoryExist;
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    const categoryExist = this.categoryRepository.findOne({id});
-    if(!Category) throw new BadRequestException('La categiria selecionada no existe')
-    const userUpdate = await this.categoryRepository.update(id,updateCategoryDto);
-    if(userUpdate.affected>0)
-    return {
-      message:"Datos actualizados correctamente",
-      data: categoryExist
+    let categoryExist = await this.categoryRepository.findOne({id});
+    if(!categoryExist) throw new BadRequestException('La categoria selecionada no existe')
+    const categoryUpdate = await this.categoryRepository.update(id,updateCategoryDto);
+    if(categoryUpdate.affected>0){
+      categoryExist = await this.categoryRepository.findOne({id});
+      return {
+        message:"Datos actualizados correctamente",
+        data: categoryExist
+      }
     }
     throw InternalServerErrorException;
   }
 
   async remove(id: number) {
     const categoryExist =  await this.categoryRepository.findOne({id});
-    if(!categoryExist) throw new BadRequestException('La categoria indica no existe');
+    if(!categoryExist) throw new BadRequestException('La categoria indicada no existe');
     const userDelete = await this.categoryRepository.delete({id});
     if(userDelete.affected>0) 
     return {

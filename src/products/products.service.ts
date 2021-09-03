@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -19,19 +19,40 @@ export class ProductsService {
     return await this.productRepository.save(newProduct);
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll() {
+    let data=await this.productRepository.find({relations:["idCategory"]});
+    data.map(item=>item['nameCategory']=item.idCategory['name']);
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const productExist = await this.productRepository.findOne({id});
+    if(!productExist) throw new BadRequestException('La categoria selecionada no existe')
+    return productExist;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    let productExist = await this.productRepository.findOne({id});
+    if(!productExist) throw new BadRequestException('El producto selecionado no existe')
+    const productUpdate = await this.productRepository.update(id,updateProductDto);
+    if(productUpdate.affected>0){
+      productExist = await this.productRepository.findOne({id});
+      return {
+        message:"Datos actualizados correctamente",
+        data: productExist
+      }
+    }
+    throw InternalServerErrorException;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    const productExist =  await this.productRepository.findOne({id});
+    if(!productExist) throw new BadRequestException('El producto indicado no existe');
+    const productDelete = await this.productRepository.delete({id});
+    if(productDelete.affected>0) 
+    return {
+      message:"Producto eliminado correctamente",
+    }
+    return InternalServerErrorException;
   }
 }

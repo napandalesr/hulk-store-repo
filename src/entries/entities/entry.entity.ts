@@ -13,9 +13,6 @@ export class Entry {
   @ManyToOne(()=>User, user => user.id)
   idUser:number;
 
-  @Column({type:'varchar',length:30})
-  name:string;
-
   @Column({type:'float'})
   units:number;
 

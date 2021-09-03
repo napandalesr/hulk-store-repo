@@ -13,12 +13,16 @@ export class EntriesService {
   ){}
 
   async create(createEntryDto: CreateEntryDto) {
+    createEntryDto['costTotal']=createEntryDto.units*createEntryDto.costUnit;
     const newEntry = await this.entryRespository.create(createEntryDto);
     return await this.entryRespository.save(newEntry);
   }
 
   async findAll() {
-    return await this.entryRespository.find();
+    let data=await this.entryRespository.find({relations:["idProduct","idUser"]});
+    data.map(item=>item['nameUser']=item.idUser['name']);
+    data.map(item=>item['nameProduct']=item.idProduct['name']);
+    return data;
   }
 
   async findOne(id: number) {
@@ -29,7 +33,8 @@ export class EntriesService {
 
   async update(id: number, updateEntryDto: UpdateEntryDto) {
     const entryExist = this.entryRespository.findOne({id});
-    if(!entryExist) throw new BadRequestException('La categiria selecionada no existe')
+    if(!entryExist) throw new BadRequestException('La entrada selecionada no existe')
+    updateEntryDto['costTotal']=updateEntryDto.units*updateEntryDto.costUnit;
     const entryUpdate = await this.entryRespository.update(id,updateEntryDto);
     if(entryUpdate.affected>0)
     return {

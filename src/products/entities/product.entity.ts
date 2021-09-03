@@ -15,6 +15,6 @@ export class Product {
   @Column({type:'varchar', length:100})
   description:string;
 
-  @Column({type:'float'})
+  @Column({type:'float', nullable:true})
   suggestedSalePrice:number;
 }
